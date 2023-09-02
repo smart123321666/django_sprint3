@@ -20,7 +20,7 @@ def post_detail(request, id):
         Post, id=id, is_published=True,
         category__is_published=True,
         pub_date__lte=dt.datetime.now()
-        )
+    )
     context = {'post': post}
     return render(request, template, context)
 
@@ -31,12 +31,12 @@ def category_posts(request, category_slug):
         Category,
         slug=category_slug,
         is_published=True
-        )
+    )
     post_list = Post.objects.filter(
         pub_date__lte=dt.datetime.now(),
         is_published=True,
         category=category
-        )
+    )
     context = {
         'category': category, 'post_list': post_list
     }
