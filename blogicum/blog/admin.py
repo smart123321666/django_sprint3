@@ -1,8 +1,8 @@
 from django.contrib import admin
-
 from .models import Post, Category, Location
 
 admin.site.empty_value_display = 'Не задано'
+
 
 class PostAdmin(admin.ModelAdmin):
     list_display = (
@@ -19,6 +19,7 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ('title', 'text')
     list_editable = ('is_published',)
 
+
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (
         'title',
@@ -29,6 +30,7 @@ class CategoryAdmin(admin.ModelAdmin):
     )
     list_filter = ('is_published',)
     search_fields = ('title',)
+
 
 class LocationAdmin(admin.ModelAdmin):
     list_display = (
