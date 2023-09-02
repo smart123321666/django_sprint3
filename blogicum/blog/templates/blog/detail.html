@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+    {% block content %}
+    {% include 'includes/article.html' %}
+    </ul>
+    <p>
+      {{post.text|linebreaksbr}}
+    </p>
+    <p><a href="{% url 'blog:post_detail' post.id %}"></a></p>
+  {% endblock %}

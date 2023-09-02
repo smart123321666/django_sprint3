@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+    {% block title %}
+    <title>Лента записей</title>
+    {% endblock %}
+    {% block content %}
+    {% for post in post_list reversed %}
+    <p>
+        {% include 'includes/article.html' %}
+    </p>
+    </ul>
+  <p>
+    {{post.text|truncatewords:10}}
+  </p>
+  <p>
+  <a href="{% url 'blog:post_detail' post.id %}">Читать полный текст</a>
+  </p>
+  <hr>
+  </article>
+    {% endfor %}
+  {% endblock %}

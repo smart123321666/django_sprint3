@@ -1,0 +1,14 @@
+{% load static %}
+{% block article %}
+ <article>
+  <ul>
+    <li>
+      {{ post.location }}
+    </li>
+    <li>
+      {{ post.date }}
+    </li>
+    <li>
+      Категория:  <a href="{% url 'blog:category_posts' post.category %}">{{ post.category }}</a>
+  </li>
+    {% endblock %}
