@@ -1,15 +1,18 @@
+import datetime as dt
 from django.shortcuts import render, get_object_or_404
 from .models import Post, Category
-import datetime as dt
+
+
+POSTS_PER_PAGE = 5
 
 
 def index(request):
     template = 'blog/index.html'
-    posts = Post.objects.filter(
+    posts = Post.objects.select_related('category', 'author').filter(
         pub_date__lte=dt.datetime.now(),
         is_published=True,
         category__is_published=True
-    ).order_by('id')[:5]
+    ).order_by('-pub_date')[:POSTS_PER_PAGE]
     context = {'post_list': posts}
     return render(request, template, context)
 
@@ -17,7 +20,9 @@ def index(request):
 def post_detail(request, id):
     template = 'blog/detail.html'
     post = get_object_or_404(
-        Post, id=id, is_published=True,
+        Post.objects.select_related('author', 'category')
+        .prefetch_related('location'),
+        id=id, is_published=True,
         category__is_published=True,
         pub_date__lte=dt.datetime.now()
     )

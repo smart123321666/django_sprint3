@@ -1,24 +1,35 @@
-from django.db import models
 from django.contrib.auth import get_user_model
-User = get_user_model()
+from django.db import models
 
 
-class Location(models.Model):
-    name = models.CharField('Название места', max_length=256)
+UserModel = get_user_model()
+
+
+class PublishedModel(models.Model):
     is_published = models.BooleanField(
         'Опубликовано',
-        help_text='''Снимите галочку, чтобы скрыть публикацию.''',
-        default=True)
-
+        help_text='Снимите галочку, чтобы скрыть публикацию.',
+        default=True
+    )
     created_at = models.DateTimeField('Добавлено',
                                       auto_now_add=True, null=True)
+
+    class Meta:
+        abstract = True
+
+
+class Location(PublishedModel):
+    name = models.CharField('Название места', max_length=256)
 
     class Meta():
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
 
+    def __str__(self):
+        return self.name
 
-class Category(models.Model):
+
+class Category(PublishedModel):
     title = models.CharField('Заголовок', max_length=256)
     description = models.TextField('Описание')
     slug = models.SlugField(
@@ -27,22 +38,16 @@ class Category(models.Model):
         ' разрешены символы латиницы, цифры, дефис и подчёркивание.',
         unique=True
     )
-    is_published = models.BooleanField(
-        'Опубликовано',
-        help_text='Снимите галочку, чтобы скрыть публикацию.',
-        default=True
-    )
-    created_at = models.DateTimeField(
-        'Добавлено',
-        auto_now_add=True,
-        null=True)
 
     class Meta():
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
 
+    def __str__(self):
+        return self.title
 
-class Post(models.Model):
+
+class Post(PublishedModel):
     title = models.CharField('Заголовок', max_length=256)
     text = models.TextField('Текст')
     pub_date = models.DateTimeField(
@@ -51,7 +56,7 @@ class Post(models.Model):
         'можно делать отложенные публикации.'
     )
     author = models.ForeignKey(
-        User,
+        UserModel,
         verbose_name='Автор публикации',
         on_delete=models.CASCADE
     )
@@ -68,9 +73,11 @@ class Post(models.Model):
         verbose_name='Категория',
         null=True
     )
-    is_published = models.BooleanField('Опубликовано', default=True)
-    created_at = models.DateTimeField('Добавлено', auto_now_add=True)
 
     class Meta():
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
+        ordering = ['-pub_date']
+
+    def __str__(self):
+        return self.title
