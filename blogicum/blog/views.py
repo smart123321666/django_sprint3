@@ -14,7 +14,7 @@ def index(request):
         pub_date__lte=dt.datetime.now(),
         is_published=True,
         category__is_published=True
-    )[:POSTS_PER_PAGE]
+    ).order_by('-pub_date')[:POSTS_PER_PAGE]
     context = {'post_list': posts}
     return render(request, template, context)
 
