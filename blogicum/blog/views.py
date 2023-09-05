@@ -1,5 +1,7 @@
 import datetime as dt
+
 from django.shortcuts import render, get_object_or_404
+
 from .models import Post, Category
 
 
@@ -12,7 +14,7 @@ def index(request):
         pub_date__lte=dt.datetime.now(),
         is_published=True,
         category__is_published=True
-    ).order_by('-pub_date')[:POSTS_PER_PAGE]
+    )[:POSTS_PER_PAGE]
     context = {'post_list': posts}
     return render(request, template, context)
 
